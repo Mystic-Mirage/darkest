@@ -1,0 +1,2 @@
+black
+git+https://github.com/Mystic-Mirage/darker.git@install
