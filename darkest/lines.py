@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 
 def read_lines(path: Path) -> List[str]:
@@ -14,17 +14,17 @@ def write_lines(path: Path, lines: List[str]) -> None:
 
 
 def split_lines(
-    lines: List[str], from_line: int, to_line: Optional[int],
+    lines: List[str], begin: int, end: int
 ) -> Tuple[List[str], List[str], List[str]]:
-    begin = from_line - 1
-    end = to_line or len(lines)
-
     head = lines[:begin]
     body = lines[begin:end]
     tail = lines[end:]
 
     for line in body[:]:
         if line.strip():
+            while line.startswith((" ", "\t")) or not line.strip():
+                line = head.pop()
+                body.insert(0, line)
             break
         head.append(line)
         body = body[1:]
