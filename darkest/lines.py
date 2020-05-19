@@ -22,7 +22,7 @@ def split_lines(
 
     for line in body[:]:
         if line.strip():
-            while line.startswith((" ", "\t")) or not line.strip():
+            while head and (line.startswith((" ", "\t")) or not line.strip()):
                 line = head.pop()
                 body.insert(0, line)
             break
