@@ -11,11 +11,11 @@ from .lines import read_lines, split_lines, write_lines
 def format_file(path: Path, from_line: int, to_line: Optional[int]) -> None:
     lines = read_lines(path)
 
-    length = len(lines)
+    length = len(lines) + 1
     begin = from_line - 1
     end = to_line or length
 
-    while length > end:
+    while end <= length:
         head, body, tail = split_lines(lines, begin, end)
 
         try:
