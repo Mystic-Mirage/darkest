@@ -19,7 +19,6 @@ def format_file(src: Path, from_line: int, to_line: int):
         black_chunks = list(opcodes_to_chunks(opcodes, original, formatted))
 
         max_line = len(original)
-        from_line = from_line
         to_line = (to_line + 1) or max_line
         linenums = list(range(from_line, to_line))
 
