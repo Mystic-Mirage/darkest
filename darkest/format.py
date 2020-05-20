@@ -1,36 +1,40 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
-from black import FileMode, InvalidInput, format_str
-from blib2to3.pgen2.tokenize import TokenError
-from darker.black_diff import read_black_config
+from darker.black_diff import (
+    diff_and_get_opcodes,
+    opcodes_to_chunks,
+    run_black,
+)
+from darker.chooser import choose_lines
+from darker.utils import joinlines
+from darker.verification import NotEquivalentError, verify_ast_unchanged
 
-from .lines import read_lines, split_lines, write_lines
 
+def format_file(src: Path, from_line: int, to_line: int):
+    while True:
+        original, formatted = run_black(src, None)
 
-def format_file(path: Path, from_line: int, to_line: Optional[int]) -> None:
-    lines = read_lines(path)
+        opcodes = diff_and_get_opcodes(original, formatted)
+        black_chunks = list(opcodes_to_chunks(opcodes, original, formatted))
 
-    length = len(lines) + 1
-    begin = from_line - 1
-    end = to_line or length
+        max_line = len(original)
+        from_line = from_line
+        to_line = (to_line + 1) or max_line
+        linenums = list(range(from_line, to_line))
 
-    while end <= length:
-        head, body, tail = split_lines(lines, begin, end)
+        chosen_lines: List[str] = list(choose_lines(black_chunks, linenums))
+
+        result_str = joinlines(chosen_lines)
 
         try:
-            formatted = format_lines(path, body)
-        except (InvalidInput, TokenError):
-            end += 1
+            verify_ast_unchanged(original, result_str, black_chunks, linenums)
+        except NotEquivalentError:
+            from_line = max(1, from_line - 1)
+            to_line = min(max_line, to_line + 1)
+            if from_line == 1 and to_line == max_line:
+                raise
             continue
 
-        new_lines = head + [formatted] + tail
-        return write_lines(path, new_lines)
-
-
-def format_lines(path: Path, lines: List[str]) -> str:
-    text = "".join(lines)
-    defaults = read_black_config(path, None)
-    mode = FileMode(**defaults)
-    formatted = format_str(text, mode=mode)
-    return formatted
+        src.write_text(result_str)
+        break

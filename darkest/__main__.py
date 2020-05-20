@@ -8,7 +8,7 @@ def parse_args():
     parser = ArgumentParser()
     parser.add_argument("path", metavar="PATH", type=Path)
     parser.add_argument("--from", type=int, default=1, dest="from_line")
-    parser.add_argument("--to", type=int, dest="to_line")
+    parser.add_argument("--to", type=int, default=-1, dest="to_line")
     args = parser.parse_args()
     return args
 
