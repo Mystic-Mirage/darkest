@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from darker.black_diff import (
     diff_and_get_opcodes,
@@ -11,9 +11,11 @@ from darker.utils import joinlines
 from darker.verification import NotEquivalentError, verify_ast_unchanged
 
 
-def format_file(src: Path, from_line: int, to_line: int):
+def format_file(
+    src: Path, from_line: int, to_line: int, config: Optional[str],
+) -> None:
     while True:
-        original, formatted = run_black(src, None)
+        original, formatted = run_black(src, config)
 
         opcodes = diff_and_get_opcodes(original, formatted)
         black_chunks = list(opcodes_to_chunks(opcodes, original, formatted))
