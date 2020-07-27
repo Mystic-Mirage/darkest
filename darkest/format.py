@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 from darker.black_diff import BlackArgs, run_black
 from darker.chooser import choose_lines
@@ -9,7 +9,7 @@ from darker.verification import NotEquivalentError, verify_ast_unchanged
 
 
 def format_file(
-    src: Path, from_line: int, to_line: int, config: Optional[str],
+    src: Path, from_line: int, to_line: int, config: str = None,
 ) -> None:
     while True:
         black_args = BlackArgs(config=config)
