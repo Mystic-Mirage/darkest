@@ -2,7 +2,7 @@
 Apply Black formatting for specified lines
 
 ## Install
-`pip install git+https://github.com/Mystic-Mirage/darkest.git`
+`pip install darkest`
 
 ## Setup PyCharm
 Add to External Tools:
