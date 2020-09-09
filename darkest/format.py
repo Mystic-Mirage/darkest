@@ -9,7 +9,10 @@ from darker.verification import NotEquivalentError, verify_ast_unchanged
 
 
 def format_file(
-    src: Path, from_line: int, to_line: int, config: str = None,
+    src: Path,
+    from_line: int,
+    to_line: int,
+    config: str = None,
 ) -> None:
     while True:
         black_args = BlackArgs(config=config)
