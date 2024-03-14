@@ -4,12 +4,12 @@ from darker.__main__ import modify_file
 from darker.black_diff import BlackConfig, run_black
 from darker.chooser import choose_lines
 from darker.diff import diff_and_get_opcodes, opcodes_to_chunks
-from darker.utils import TextDocument
 from darker.verification import (
     BinarySearch,
     NotEquivalentError,
     verify_ast_unchanged,
 )
+from darkgraylib.utils import TextDocument
 
 
 def format_file(
