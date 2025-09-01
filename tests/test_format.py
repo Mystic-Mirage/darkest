@@ -23,7 +23,7 @@ c = [8,9,0,]
 """
 
 
-def test_fromat_file(tmpdir):
+def test_format_file(tmpdir):
     sample = tmpdir / "sample.py"
     sample.write(ORIGINAL)
     format_file(src=Path(sample), from_line=3, to_line=3)
